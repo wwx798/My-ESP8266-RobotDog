@@ -28,24 +28,24 @@
             height: auto;
             width: auto;
             margin-top: 20px;
-
             padding: 10px 20px;
             background-color: deepskyblue;
             color: #fff;
             border: none;
-            border-radius: 20px; /* 添加圆角 */
+            border-radius: 20px;
             text-decoration: none;
-            line-height: 2; /* 通过调整line-height的值来调整文字的垂直位置 */
-            text-align: center; /* 文字居中 */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 添加立体感 */
-            transition: all 0.3s ease; /* 添加过渡效果 */
+            line-height: 2;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            background-color: skyblue; /* 鼠标悬停时的背景颜色 */
-            transform: translateY(2px); /* 点击效果 */
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3); /* 添加更多立体感 */
+            background-color: skyblue;
+            transform: translateY(2px);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
         }
+        
         .button-grid3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -55,6 +55,7 @@
             text-align: center;
             margin: 20px;
         }
+        
         .button-grid2 {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -63,20 +64,57 @@
             align-content: center;
             text-align: center;
             margin: 20px;
-        } .button-grid1 {
-              display: grid;
-              border-radius: 20px; /* 添加圆角 */
-              grid-template-columns: repeat(1, 1fr);
-              justify-content: center;
-              align-content: center;
-              text-align: center;
-              margin: 10px;
-
-          }
-
+        }
+        
+        .button-grid1 {
+            display: grid;
+            border-radius: 20px;
+            grid-template-columns: repeat(1, 1fr);
+            justify-content: center;
+            align-content: center;
+            text-align: center;
+            margin: 10px;
+        }
+        
+        /* 电量显示居中样式 */
+        .battery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .battery-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 12px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+        
+        .battery-card p {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .battery-card span {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        
+        .info-btn {
+            background-color: #ff6b6b;
+            margin-top: 5px;
+        }
+        
+        .info-btn:hover {
+            background-color: #ff5252;
+        }
     </style>
     <script>
-        // 简化 AJAX 请求函数
         function sendCommand(action) {
             fetch(`/${action}`)
                 .then(response => response.text())
@@ -88,7 +126,8 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById(displayElementId).innerText = data;
-                });
+                })
+                .catch(() => console.log('刷新失败'));
         }
 
         function setRefreshInterval(url, displayElementId) {
@@ -101,69 +140,71 @@
         ];
 
         states.forEach(state => setRefreshInterval(state.url, state.displayId));
-
     </script>
 </head>
 <body>
 <div class='container'>
-    <h1>EDA-Robot遥控台</h1>
-    <p>本项目基于ESP8266主控开发</p >
-    <div class="button-grid2" style="display: flex; justify-content: center;">
-       
-        <button style="margin-left: 70px"><p>电量：<span id="batteryPercentageDisplay">0</span></p></button>
+    <h1>🤖 EDA-Robot遥控台</h1>
+    <p>本项目基于ESP8266主控开发 | 四足机器狗</p>
+    
+    <!-- 电量显示 - 已居中 -->
+    <div class="battery-container">
+        <div class="battery-card">
+            <p>🔋 电量：<span id="batteryPercentageDisplay">0</span>%</p>
+        </div>
     </div>
+    
+    <!-- 显示信息按键 -->
+    <div class="button-grid1">
+        <button class="info-btn" onclick="sendCommand('info')">📋 显示项目信息</button>
+    </div>
+
     <!-- 运动控制 -->
-    <div class="button-grid1" style="background-color: papayawhip">
-        <h3>运动控制</h3>
-        <div class="button-grid1"style="display: flex; justify-content: center;">
-            <button  onclick="sendCommand('front')">↑</button>
+    <div class="button-grid1" style="background-color: papayawhip; border-radius: 20px; padding: 10px;">
+        <h3>🏃 运动控制</h3>
+        <div class="button-grid1" style="display: flex; justify-content: center;">
+            <button onclick="sendCommand('front')">⬆️ 前进</button>
         </div>
         <div class="button-grid2" style="display: flex; justify-content: center;">
-            <button  onclick="sendCommand('left')" style="margin-right: 70px">←</button>
-            <button  onclick="sendCommand('right')" style="margin-left: 70px">→</button>
+            <button onclick="sendCommand('left')" style="margin-right: 70px">⬅️ 左转</button>
+            <button onclick="sendCommand('right')" style="margin-left: 70px">➡️ 右转</button>
         </div>
         <div class="button-grid1" style="display: flex; justify-content: center;">
-            <button  onclick="sendCommand('back')">↓</button>
+            <button onclick="sendCommand('back')">⬇️ 后退</button>
         </div>
-        <div  class="button-grid3">
-            <button onclick="sendCommand('toplefthand')">抬左手</button>
-            <button onclick="sendCommand('toprighthand')">抬右手</button>
-            <button onclick="sendCommand('sitdown')">坐下</button>
-            <button onclick="sendCommand('lie')">躺下</button>
-
-           
+        <div class="button-grid3">
+            <button onclick="sendCommand('toplefthand')">🦾 抬左手</button>
+            <button onclick="sendCommand('toprighthand')">🦾 抬右手</button>
+            <button onclick="sendCommand('sitdown')">💺 坐下</button>
+            <button onclick="sendCommand('lie')">😴 躺下</button>
         </div>
-        <div  class="button-grid1">
-            <button onclick="sendCommand('sleep')">回收</button>
-            </div>
+        <div class="button-grid1">
+            <button onclick="sendCommand('sleep')">📦 回收</button>
+        </div>
     </div>
 
     <!-- 表情控制 -->
-    <div class="button-grid1" style="background-color: limegreen">
-        <h3>表情控制</h3>
-        <div class="button-grid3" >
-            <button onclick="sendCommand('histate')">开心</button>
-            <button onclick="sendCommand('angrystate')">生气</button>
-            <button onclick="sendCommand('sickstate')">难受</button>
-            <button onclick="sendCommand('dowhatstate')">好奇</button>
-            <button onclick="sendCommand('lovestate')">喜欢</button>
-            <button onclick="sendCommand('errorstate')">错误</button>
-            <button onclick="sendCommand('yunstate')">晕</button>
-           
+    <div class="button-grid1" style="background-color: limegreen; border-radius: 20px; padding: 10px;">
+        <h3>😀 表情控制</h3>
+        <div class="button-grid3">
+            <button onclick="sendCommand('histate')">😊 开心</button>
+            <button onclick="sendCommand('angrystate')">😠 生气</button>
+            <button onclick="sendCommand('sickstate')">😷 难受</button>
+            <button onclick="sendCommand('dowhatstate')">🤔 好奇</button>
+            <button onclick="sendCommand('lovestate')">❤️ 喜欢</button>
+            <button onclick="sendCommand('errorstate')">❌ 错误</button>
+            <button onclick="sendCommand('yunstate')">😵 晕</button>
         </div>
     </div>
 
     <!-- 联网功能 -->
-    <div class="button-grid1" style="background-color: orange">
-        <h3>联网功能</h3>
+    <div class="button-grid1" style="background-color: orange; border-radius: 20px; padding: 10px;">
+        <h3>🌐 联网功能</h3>
         <div class="button-grid2">
-            <button onclick="sendCommand('time')">时间</button>
-            <button onclick="sendCommand('weather')">天气</button>
-
-
+            <button onclick="sendCommand('time')">🕐 时间</button>
+            <button onclick="sendCommand('weather')">⛅ 天气</button>
         </div>
     </div>
-
 </div>
 </body>
 </html>

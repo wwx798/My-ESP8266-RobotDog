@@ -79,9 +79,9 @@ void drawSick() { u8g2.drawXBMP(0, 0, 128, 64, sick); }
 void drawYun() { u8g2.drawXBMP(0, 0, 128, 64, yun); }
 void drawWeather() {if (weather == "阴" || weather == "多云") {
         u8g2.drawXBMP(0, 0, 64, 64, cloud);
-    } else if (weather == "小雨" || weather == "大雨" || weather == "暴雨" || weather == "雨") {
+    } else if (weather == "小雨" || weather == "大雨" || weather == "暴雨" || weather == "雨"||weather=="中雨") {
         u8g2.drawXBMP(0, 0, 64, 64, rain);
-    } else if (weather == "晴") {
+    } else {
         u8g2.drawXBMP(0, 0, 64, 64, sun);
     }
     
@@ -359,7 +359,7 @@ void setup() {
             attempts++;
         }
     }
-     showProjectInfo();
+   
     // 如果还是失败，启动AP配网模式
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("\nStarting AP config mode...");
@@ -385,7 +385,11 @@ void setup() {
      server.on("/batteryPercentage", HTTP_GET, [](AsyncWebServerRequest *request)
     { request->send(200, "text/plain", String(batteryPercentage)); });
     server.onNotFound(notFound);
-
+//信息显示
+server.on("/info", HTTP_GET, [](AsyncWebServerRequest *request) {
+      showProjectInfo(); // 调用你的信息显示函数
+    request->send(200, "text/plain", "OK");
+});
     server.begin();
 
 
